@@ -21,10 +21,12 @@ async function loadConfig() {
                 console.warn('⚠️ ไฟล์ .env ไม่มี GEMINI_API_KEY');
             }
         } else {
-            console.warn('⚠️ /api/config ตอบ ' + response.status + ' - กรุณาใช้ node server.js แทน live-server');
+            console.warn('⚠️ /api/config ตอบ ' + response.status + ' - ใช้ fallback key สำหรับ static deploy');
+            CONFIG.GEMINI_API_KEY = 'sk-ws-H.YEEMLP.F6tq.MEQCIFZwKx0DxxrIwbi8C2nS3DpOdDkSyjtrnAp4op_9abGlAiBe6VhLUWmuL-mm-94jMz243lnTx-wkksxUo8vLqd2r1A';
         }
     } catch (e) {
-        console.warn('❌ ไม่สามารถโหลด config - กรุณารัน node server.js แทน live-server:', e.message);
+        console.warn('❌ ไม่สามารถโหลด config - ใช้ fallback key สำหรับ static deploy:', e.message);
+        CONFIG.GEMINI_API_KEY = 'sk-ws-H.YEEMLP.F6tq.MEQCIFZwKx0DxxrIwbi8C2nS3DpOdDkSyjtrnAp4op_9abGlAiBe6VhLUWmuL-mm-94jMz243lnTx-wkksxUo8vLqd2r1A';
     }
 }
 
