@@ -411,7 +411,7 @@ async function callGeminiAPI(userMessage) {
     // 2. Direct browser fallback (For GitHub Pages / Static Hosting)
     if (!usingProxy) {
         const alibabaKey = 'sk-ws-H.YEEMLP.F6tq.MEQCIFZwKx0DxxrIwbi8C2nS3DpOdDkSyjtrnAp4op_9abGlAiBe6VhLUWmuL-mm-94jMz243lnTx-wkksxUo8vLqd2r1A';
-        const endpoint = 'https://ws-mdu7bwolkfs5bk1i.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions';
+        const endpoint = 'https://corsproxy.io/?url=https://ws-mdu7bwolkfs5bk1i.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions';
 
         const messages = [
             { role: 'system', content: buildSystemPrompt() }
