@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI HR Interview Assistant</title>
+    <meta name="description" content="ระบบฝึกสัมภาษณ์งานสาย IT ด้วย AI พร้อมวิเคราะห์คำตอบและสรุปคะแนน">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ===== NAVBAR ===== -->
+    <nav id="navbar" class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" onclick="navigateTo('landing');return false;">
+                <div class="logo-icon">
+                    <i data-lucide="brain-circuit"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">AI HR Interview</span>
+                    <span class="logo-sub">Assistant</span>
+                </div>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="เปิดเมนู">
+                <i data-lucide="menu"></i>
+            </button>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#" class="nav-link active" data-page="landing" onclick="navigateTo('landing');return false;">หน้าหลัก</a>
+                <a href="#" class="nav-link" onclick="openModal('howto-modal');return false;">วิธีใช้งาน</a>
+                <a href="#" class="nav-link" onclick="openHistory();return false;">ประวัติผลการฝึก</a>
+                <button class="btn btn-primary btn-sm" onclick="goToSetup()">เริ่มสัมภาษณ์</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- ===== LANDING PAGE ===== -->
+        <section id="landing-page" class="page active">
+            <div class="hero-section">
+                <div class="hero-container">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <i data-lucide="sparkles"></i>
+                            <span>Powered by Gemini AI</span>
+                        </div>
+                        <h1 class="hero-title">ฝึกสัมภาษณ์งาน<br><span class="text-gradient">กับ AI</span></h1>
+                        <p class="hero-desc">จำลองการสัมภาษณ์งานสาย IT ด้วยเสียงภาษาไทย พร้อมวิเคราะห์คำตอบและแนะนำจุดที่ควรพัฒนา ให้คุณพร้อมสำหรับการสัมภาษณ์จริง</p>
+                        <div class="hero-actions">
+                            <button class="btn btn-primary btn-lg" onclick="goToSetup()">
+                                <i data-lucide="mic"></i>
+                                เริ่มสัมภาษณ์
+                            </button>
+                            <button class="btn btn-outline btn-lg" onclick="openModal('howto-modal')">
+                                <i data-lucide="play-circle"></i>
+                                ดูวิธีใช้งาน
+                            </button>
+                        </div>
+                        <div class="hero-stats">
+                            <div class="hero-stat">
+                                <span class="stat-num">7</span>
+                                <span class="stat-label">ตำแหน่งงาน</span>
+                            </div>
+                            <div class="hero-stat-divider"></div>
+                            <div class="hero-stat">
+                                <span class="stat-num">3</span>
+                                <span class="stat-label">ระดับความยาก</span>
+                            </div>
+                            <div class="hero-stat-divider"></div>
+                            <div class="hero-stat">
+                                <span class="stat-num">100%</span>
+                                <span class="stat-label">ภาษาไทย</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-illustration">
+                            <div class="hero-rings">
+                                <div class="hero-ring ring-1"></div>
+                                <div class="hero-ring ring-2"></div>
+                                <div class="hero-ring ring-3"></div>
+                            </div>
+                            <div class="hero-avatar">
+                                <i data-lucide="bot"></i>
+                            </div>
+                            <div class="hero-wave-container">
+                                <div class="hero-wave-bar" style="--i:0"></div>
+                                <div class="hero-wave-bar" style="--i:1"></div>
+                                <div class="hero-wave-bar" style="--i:2"></div>
+                                <div class="hero-wave-bar" style="--i:3"></div>
+                                <div class="hero-wave-bar" style="--i:4"></div>
+                                <div class="hero-wave-bar" style="--i:5"></div>
+                                <div class="hero-wave-bar" style="--i:6"></div>
+                                <div class="hero-wave-bar" style="--i:7"></div>
+                                <div class="hero-wave-bar" style="--i:8"></div>
+                                <div class="hero-wave-bar" style="--i:9"></div>
+                                <div class="hero-wave-bar" style="--i:10"></div>
+                                <div class="hero-wave-bar" style="--i:11"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="features-section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">ทำไมต้องฝึกกับเรา</h2>
+                        <p class="section-subtitle">ระบบที่ออกแบบมาเพื่อเตรียมความพร้อมก่อนเข้าสัมภาษณ์จริง</p>
+                    </div>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i data-lucide="mic"></i>
+                            </div>
+                            <h3>สนทนาด้วยเสียงภาษาไทย</h3>
+                            <p>พูดตอบเป็นธรรมชาติเหมือนสัมภาษณ์จริง ระบบจับเสียงและแปลงเป็นข้อความอัตโนมัติ รองรับทั้งการพูดและพิมพ์</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i data-lucide="target"></i>
+                            </div>
+                            <h3>คำถามตามตำแหน่งงาน</h3>
+                            <p>AI สร้างคำถามที่เฉพาะเจาะจงตามตำแหน่ง IT ที่เลือก ไม่ซ้ำซาก ปรับตามระดับความยากและคำตอบก่อนหน้า</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i data-lucide="bar-chart-3"></i>
+                            </div>
+                            <h3>วิเคราะห์และสรุปคะแนนทันที</h3>
+                            <p>ประเมินทักษะ Technical, Communication, Problem Solving และ Confidence พร้อมแนะนำจุดที่ควรพัฒนา</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SETUP PAGE ===== -->
+        <section id="setup-page" class="page">
+            <div class="container">
+                <div class="setup-wrapper">
+                    <div class="setup-header">
+                        <button class="btn btn-ghost" onclick="navigateTo('landing')" aria-label="กลับ">
+                            <i data-lucide="arrow-left"></i>
+                            กลับ
+                        </button>
+                        <h2>ตั้งค่าการสัมภาษณ์</h2>
+                        <p>กรอกข้อมูลและเลือกตัวเลือกเพื่อเริ่มฝึกสัมภาษณ์</p>
+                    </div>
+                    <form id="setup-form" onsubmit="return false;" novalidate>
+                        <div class="form-section">
+                            <h3 class="form-section-title"><i data-lucide="user"></i> ข้อมูลผู้สมัคร</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="inp-name">ชื่อ-นามสกุล <span class="required">*</span></label>
+                                    <input type="text" id="inp-name" placeholder="เช่น สมชาย ใจดี" required>
+                                    <span class="form-error" id="err-name"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-nickname">ชื่อเล่น <span class="required">*</span></label>
+                                    <input type="text" id="inp-nickname" placeholder="เช่น มัก" required>
+                                    <span class="form-error" id="err-nickname"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-education">ระดับการศึกษา <span class="required">*</span></label>
+                                    <select id="inp-education" required>
+                                        <option value="">-- เลือกระดับการศึกษา --</option>
+                                        <option value="มัธยมศึกษา">มัธยมศึกษา</option>
+                                        <option value="ปวช.">ปวช.</option>
+                                        <option value="ปวส.">ปวส.</option>
+                                        <option value="ปริญญาตรี">ปริญญาตรี</option>
+                                        <option value="ปริญญาโท">ปริญญาโท</option>
+                                        <option value="ปริญญาเอก">ปริญญาเอก</option>
+                                    </select>
+                                    <span class="form-error" id="err-education"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-major">สาขาวิชา <span class="required">*</span></label>
+                                    <input type="text" id="inp-major" placeholder="เช่น วิทยาการคอมพิวเตอร์" required>
+                                    <span class="form-error" id="err-major"></span>
+                                </div>
+                                <div class="form-group form-group-full">
+                                    <label for="inp-experience">ประสบการณ์โดยประมาณ <span class="required">*</span></label>
+                                    <select id="inp-experience" required>
+                                        <option value="">-- เลือกประสบการณ์ --</option>
+                                        <option value="ไม่มีประสบการณ์">ไม่มีประสบการณ์</option>
+                                        <option value="น้อยกว่า 1 ปี">น้อยกว่า 1 ปี</option>
+                                        <option value="1-2 ปี">1-2 ปี</option>
+                                        <option value="2-5 ปี">2-5 ปี</option>
+                                        <option value="มากกว่า 5 ปี">มากกว่า 5 ปี</option>
+                                    </select>
+                                    <span class="form-error" id="err-experience"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3 class="form-section-title"><i data-lucide="briefcase"></i> ตัวเลือกการสัมภาษณ์</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="inp-position">ตำแหน่งงาน <span class="required">*</span></label>
+                                    <select id="inp-position" required>
+                                        <option value="">-- เลือกตำแหน่ง --</option>
+                                        <option value="IT Support">IT Support</option>
+                                        <option value="Help Desk">Help Desk</option>
+                                        <option value="Frontend Developer">Frontend Developer</option>
+                                        <option value="Backend Developer">Backend Developer</option>
+                                        <option value="Full Stack Developer">Full Stack Developer</option>
+                                        <option value="Network Administrator">Network Administrator</option>
+                                        <option value="Cyber Security Analyst">Cyber Security Analyst</option>
+                                    </select>
+                                    <span class="form-error" id="err-position"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-difficulty">ระดับคำถาม <span class="required">*</span></label>
+                                    <select id="inp-difficulty" required>
+                                        <option value="">-- เลือกระดับ --</option>
+                                        <option value="Beginner">Beginner (เริ่มต้น)</option>
+                                        <option value="Intermediate">Intermediate (ปานกลาง)</option>
+                                        <option value="Advanced">Advanced (ขั้นสูง)</option>
+                                    </select>
+                                    <span class="form-error" id="err-difficulty"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-type">รูปแบบสัมภาษณ์ <span class="required">*</span></label>
+                                    <select id="inp-type" required>
+                                        <option value="">-- เลือกรูปแบบ --</option>
+                                        <option value="HR Interview">HR Interview</option>
+                                        <option value="Technical Interview">Technical Interview</option>
+                                        <option value="HR + Technical Interview">HR + Technical Interview</option>
+                                    </select>
+                                    <span class="form-error" id="err-type"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-duration">จำนวนคำถาม <span class="required">*</span></label>
+                                    <select id="inp-duration" required>
+                                        <option value="">-- เลือกจำนวน --</option>
+                                        <option value="5">แบบสั้น (5 คำถาม)</option>
+                                        <option value="7">แบบมาตรฐาน (7 คำถาม)</option>
+                                        <option value="10">แบบเต็ม (10 คำถาม)</option>
+                                    </select>
+                                    <span class="form-error" id="err-duration"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setup-actions">
+                            <button type="button" class="btn btn-ghost" onclick="navigateTo('landing')">ยกเลิก</button>
+                            <button type="button" class="btn btn-primary btn-lg" id="btn-enter-room" onclick="enterInterviewRoom()">
+                                <i data-lucide="log-in"></i>
+                                เข้าสู่ห้องสัมภาษณ์
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== INTERVIEW ROOM ===== -->
+        <section id="interview-room-page" class="page">
+            <div class="room-container">
+                <!-- แถบด้านบน -->
+                <div class="room-header">
+                    <div class="room-header-left">
+                        <div class="room-ai-mini-avatar">
+                            <i data-lucide="bot"></i>
+                        </div>
+                        <div class="room-header-info">
+                            <span class="room-ai-name">AI HR Interviewer</span>
+                            <span class="room-position" id="room-position-label">-</span>
+                        </div>
+                    </div>
+                    <div class="room-header-center">
+                        <span class="room-question-count" id="room-q-count">0 / 0</span>
+                        <div class="room-progress-bar">
+                            <div class="room-progress-fill" id="room-progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="room-header-right">
+                        <div class="room-timer" id="room-timer">
+                            <i data-lucide="clock"></i>
+                            <span id="room-timer-text">00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- พื้นที่หลัก -->
+                <div class="room-main">
+                    <!-- ด้านซ้าย: AI + คำถาม -->
+                    <div class="room-left">
+                        <div class="ai-panel">
+                            <div class="ai-avatar-container">
+                                <div class="ai-avatar-rings" id="ai-avatar-rings">
+                                    <div class="ai-ring ai-ring-1"></div>
+                                    <div class="ai-ring ai-ring-2"></div>
+                                </div>
+                                <div class="ai-avatar-circle">
+                                    <i data-lucide="bot"></i>
+                                </div>
+                            </div>
+                            <div class="ai-status" id="ai-status">กำลังเตรียมคำถาม</div>
+                            <div class="ai-voice-wave" id="ai-voice-wave">
+                                <div class="ai-wave-bar"></div>
+                                <div class="ai-wave-bar"></div>
+                                <div class="ai-wave-bar"></div>
+                                <div class="ai-wave-bar"></div>
+                                <div class="ai-wave-bar"></div>
+                            </div>
+                        </div>
+                        <div class="question-box glass-card" id="question-box">
+                            <div class="question-label">
+                                <i data-lucide="message-square"></i>
+                                <span>คำถามจาก AI</span>
+                            </div>
+                            <div class="question-text" id="question-text">ระบบกำลังเตรียมคำถามแรก...</div>
+                            <div class="question-actions">
+                                <button class="btn btn-ghost btn-xs" id="btn-repeat" onclick="repeatQuestion()" aria-label="พูดคำถามซ้ำ" disabled>
+                                    <i data-lucide="repeat"></i>
+                                    พูดซ้ำ
+                                </button>
+                                <button class="btn btn-ghost btn-xs" id="btn-stop-speech" onclick="stopSpeech()" aria-label="หยุดเสียง" disabled>
+                                    <i data-lucide="volume-x"></i>
+                                    หยุดเสียง
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ด้านขวา: คำตอบ + ประวัติ -->
+                    <div class="room-right">
+                        <div class="answer-box glass-card" id="answer-box">
+                            <div class="answer-label">
+                                <i data-lucide="mic"></i>
+                                <span>คำตอบของคุณ</span>
+                            </div>
+                            <!-- โหมดเสียง -->
+                            <div id="voice-mode">
+                                <div class="transcript-area" id="transcript-area">
+                                    <span class="transcript-placeholder" id="transcript-placeholder">กดปุ่มไมโครโฟนเพื่อเริ่มตอบ...</span>
+                                    <span class="transcript-interim" id="transcript-interim"></span>
+                                    <span class="transcript-final" id="transcript-final"></span>
+                                </div>
+                                <div class="transcript-actions" id="transcript-actions" style="display:none;">
+                                    <button class="btn btn-ghost btn-xs" onclick="retrySpeech()" aria-label="พูดใหม่">
+                                        <i data-lucide="rotate-ccw"></i>
+                                        ลองพูดใหม่
+                                    </button>
+                                    <button class="btn btn-primary btn-xs" id="btn-send-answer" onclick="sendAnswer()" aria-label="ส่งคำตอบ">
+                                        <i data-lucide="send"></i>
+                                        ส่งคำตอบ
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- โหมดพิมพ์ -->
+                            <div id="type-mode" style="display:none;">
+                                <textarea id="type-textarea" class="type-textarea" placeholder="พิมพ์คำตอบที่นี่..." rows="4"></textarea>
+                                <div class="type-actions">
+                                    <button class="btn btn-primary btn-xs" onclick="sendTypedAnswer()" aria-label="ส่งคำตอบ">
+                                        <i data-lucide="send"></i>
+                                        ส่งคำตอบ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- สลับโหมด -->
+                        <div class="mode-toggle">
+                            <button class="btn btn-ghost btn-xs mode-btn active" id="btn-voice-mode" onclick="switchMode('voice')" aria-label="โหมดเสียง">
+                                <i data-lucide="mic"></i>
+                                ใช้เสียง
+                            </button>
+                            <button class="btn btn-ghost btn-xs mode-btn" id="btn-type-mode" onclick="switchMode('type')" aria-label="โหมดพิมพ์">
+                                <i data-lucide="keyboard"></i>
+                                พิมพ์แทน
+                            </button>
+                        </div>
+
+                        <!-- ประวัติการสนทนา -->
+                        <div class="chat-history-card glass-card">
+                            <div class="chat-history-header" onclick="toggleChatHistory()" role="button" tabindex="0" aria-label="เปิด/ปิดประวัติการสนทนา">
+                                <span><i data-lucide="messages-square"></i> ประวัติการสนทนา</span>
+                                <i data-lucide="chevron-down" class="chat-history-chevron" id="chat-chevron"></i>
+                            </div>
+                            <div class="chat-history-body" id="chat-history-body">
+                                <div class="chat-empty" id="chat-empty">ยังไม่มีการสนทนา</div>
+                                <div class="chat-messages" id="chat-messages"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- แถบควบคุมด้านล่าง -->
+                <div class="room-controls">
+                    <div class="controls-center">
+                        <button class="control-btn" id="btn-mic" onclick="toggleMic()" aria-label="กดพูด" disabled>
+                            <i data-lucide="mic"></i>
+                        </button>
+                        <span class="control-label" id="mic-label">กดเพื่อพูด</span>
+                    </div>
+                    <div class="controls-sides">
+                        <button class="control-btn control-btn-sm" onclick="restartInterview()" aria-label="เริ่มใหม่">
+                            <i data-lucide="rotate-ccw"></i>
+                        </button>
+                        <button class="control-btn control-btn-danger" onclick="confirmEndInterview()" aria-label="จบการสัมภาษณ์">
+                            <i data-lucide="x"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== RESULT PAGE ===== -->
+        <section id="result-page" class="page">
+            <div class="container">
+                <div class="result-wrapper">
+                    <div class="result-header">
+                        <h2>ผลการประเมิน</h2>
+                        <p id="result-subtitle">-</p>
+                    </div>
+                    <div class="result-top-row">
+                        <div class="result-score-card glass-card">
+                            <div class="circular-score-container">
+                                <svg class="circular-score" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="52" fill="none" stroke="#e8e0d0" stroke-width="8"/>
+                                    <circle class="score-ring" id="score-ring" cx="60" cy="60" r="52" fill="none" stroke="#D71920" stroke-width="8" stroke-dasharray="326.73" stroke-dashoffset="326.73" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                                    <text class="score-text" id="score-text" x="60" y="55" text-anchor="middle" dominant-baseline="central" font-size="32" font-weight="800" fill="#231F20">0</text>
+                                    <text class="score-label-svg" x="60" y="78" text-anchor="middle" font-size="11" fill="#666">คะแนนรวม</text>
+                                </svg>
+                            </div>
+                            <div class="result-meta">
+                                <div class="meta-item"><span class="meta-label">ผู้สมัคร</span><span class="meta-value" id="res-name">-</span></div>
+                                <div class="meta-item"><span class="meta-label">ตำแหน่ง</span><span class="meta-value" id="res-position">-</span></div>
+                                <div class="meta-item"><span class="meta-label">วันที่</span><span class="meta-value" id="res-date">-</span></div>
+                                <div class="meta-item"><span class="meta-label">เวลาที่ใช้</span><span class="meta-value" id="res-duration">-</span></div>
+                                <div class="meta-item"><span class="meta-label">จำนวนคำถาม</span><span class="meta-value" id="res-qcount">-</span></div>
+                            </div>
+                        </div>
+                        <div class="result-chart-card glass-card">
+                            <h3>กราฟวิเคราะห์ทักษะ</h3>
+                            <div class="chart-container">
+                                <canvas id="radar-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-scores-row">
+                        <div class="score-detail-card" id="score-technical">
+                            <div class="score-detail-icon"><i data-lucide="code-2"></i></div>
+                            <div class="score-detail-info">
+                                <span class="score-detail-label">Technical Skill</span>
+                                <div class="score-detail-bar"><div class="score-detail-fill" id="fill-technical"></div></div>
+                            </div>
+                            <span class="score-detail-num" id="num-technical">0</span>
+                        </div>
+                        <div class="score-detail-card" id="score-communication">
+                            <div class="score-detail-icon"><i data-lucide="message-circle"></i></div>
+                            <div class="score-detail-info">
+                                <span class="score-detail-label">Communication</span>
+                                <div class="score-detail-bar"><div class="score-detail-fill" id="fill-communication"></div></div>
+                            </div>
+                            <span class="score-detail-num" id="num-communication">0</span>
+                        </div>
+                        <div class="score-detail-card" id="score-problemsolving">
+                            <div class="score-detail-icon"><i data-lucide="lightbulb"></i></div>
+                            <div class="score-detail-info">
+                                <span class="score-detail-label">Problem Solving</span>
+                                <div class="score-detail-bar"><div class="score-detail-fill" id="fill-problemsolving"></div></div>
+                            </div>
+                            <span class="score-detail-num" id="num-problemsolving">0</span>
+                        </div>
+                        <div class="score-detail-card" id="score-confidence">
+                            <div class="score-detail-icon"><i data-lucide="shield-check"></i></div>
+                            <div class="score-detail-info">
+                                <span class="score-detail-label">Confidence</span>
+                                <div class="score-detail-bar"><div class="score-detail-fill" id="fill-confidence"></div></div>
+                            </div>
+                            <span class="score-detail-num" id="num-confidence">0</span>
+                        </div>
+                    </div>
+                    <div class="result-feedback-row">
+                        <div class="feedback-card glass-card feedback-strengths">
+                            <h3><i data-lucide="star"></i> จุดแข็ง</h3>
+                            <ul id="res-strengths"></ul>
+                        </div>
+                        <div class="feedback-card glass-card feedback-improvements">
+                            <h3><i data-lucide="trending-up"></i> จุดที่ควรปรับปรุง</h3>
+                            <ul id="res-improvements"></ul>
+                        </div>
+                    </div>
+                    <div class="result-recommendation glass-card">
+                        <h3><i data-lucide="message-square-text"></i> คำแนะนำจาก AI</h3>
+                        <p id="res-recommendation">-</p>
+                    </div>
+                    <div class="result-answer-card glass-card">
+                        <h3><i data-lucide="check-circle"></i> ตัวอย่างแนวทางตอบที่ดีขึ้น</h3>
+                        <p id="res-recommended-answer">-</p>
+                    </div>
+                    <div class="result-conversation-card glass-card">
+                        <h3><i data-lucide="scroll-text"></i> ประวัติคำถามและคำตอบทั้งหมด</h3>
+                        <div id="res-conversation"></div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn btn-primary" onclick="goToSetup()"><i data-lucide="rotate-ccw"></i> ฝึกใหม่</button>
+                        <button class="btn btn-outline" onclick="navigateTo('landing')"><i data-lucide="home"></i> กลับหน้าหลัก</button>
+                        <button class="btn btn-ghost" onclick="downloadJSON()"><i data-lucide="download"></i> ดาวน์โหลด JSON</button>
+                        <button class="btn btn-ghost" onclick="downloadText()"><i data-lucide="file-text"></i> ดาวน์โหลดรายงาน</button>
+                        <button class="btn btn-ghost" onclick="window.print()"><i data-lucide="printer"></i> พิมพ์ผล</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== MODALS ===== -->
+    <!-- API Key Modal -->
+    <div class="modal-overlay hidden" id="apikey-modal">
+        <div class="modal-box">
+            <div class="modal-icon modal-icon-error">
+                <i data-lucide="key-round"></i>
+            </div>
+            <h3>ยังไม่ได้ตั้งค่า API Key</h3>
+            <p>กรุณาใส่ Gemini API Key ในไฟล์ <code>.env</code> ก่อนเริ่มใช้งาน</p>
+            <div class="howto-steps" style="text-align:left; margin: 1rem 0;">
+                <p style="margin:0.4rem 0;"><strong>1.</strong> ไปที่ <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:#D71920;">Google AI Studio → สร้าง API Key</a></p>
+                <p style="margin:0.4rem 0;"><strong>2.</strong> Copy key ที่ได้ (ขึ้นต้นด้วย <code>AIza...</code>)</p>
+                <p style="margin:0.4rem 0;"><strong>3.</strong> เปิดไฟล์ <code>.env</code> แล้วใส่: <code>GEMINI_API_KEY=AIza...</code></p>
+                <p style="margin:0.4rem 0;"><strong>4.</strong> Refresh หน้าเว็บ (ไม่ต้อง restart server)</p>
+            </div>
+            <p class="modal-hint">⚠️ ต้องเปิดเว็บผ่าน <code>node server.js</code> (port 3000) ไม่ใช่ live-server</p>
+            <button class="btn btn-primary" onclick="closeModal('apikey-modal')">เข้าใจแล้ว</button>
+        </div>
+    </div>
+
+    <!-- How To Modal -->
+    <div class="modal-overlay hidden" id="howto-modal">
+        <div class="modal-box modal-box-lg">
+            <button class="modal-close" onclick="closeModal('howto-modal')" aria-label="ปิด"><i data-lucide="x"></i></button>
+            <h3>วิธีใช้งาน</h3>
+            <div class="howto-steps">
+                <div class="howto-step">
+                    <div class="howto-step-num">1</div>
+                    <div class="howto-step-content">
+                        <h4>ตั้งค่า API Key</h4>
+                        <p>เปิดไฟล์ <code>.env</code> แล้ววาง Gemini API Key ที่ได้จาก Google AI Studio ลงในรูปแบบ <code>GEMINI_API_KEY=your_key</code></p>
+                    </div>
+                </div>
+                <div class="howto-step">
+                    <div class="howto-step-num">2</div>
+                    <div class="howto-step-content">
+                        <h4>กรอกข้อมูลและเลือกตัวเลือก</h4>
+                        <p>กรอกชื่อ ระดับการศึกษา สาขาวิชา ประสบการณ์ และเลือกตำแหน่งงาน ระดับความยาก รูปแบบ และจำนวนคำถาม</p>
+                    </div>
+                </div>
+                <div class="howto-step">
+                    <div class="howto-step-num">3</div>
+                    <div class="howto-step-content">
+                        <h4>เข้าสู่ห้องสัมภาษณ์</h4>
+                        <p>AI จะพูดคำถามออกมาเป็นเสียง เมื่อ AI พูดเสร็จ กดปุ่มไมโครโฟนแล้วพูดตอบ หรือพิมพ์คำตอบแทนได้</p>
+                    </div>
+                </div>
+                <div class="howto-step">
+                    <div class="howto-step-num">4</div>
+                    <div class="howto-step-content">
+                        <h4>ตรวจสอบและส่งคำตอบ</h4>
+                        <p>ระบบจะแปลงเสียงเป็นข้อความ ตรวจสอบให้แน่ใจว่าถูกต้องแล้วกด "ส่งคำตอบ" หากไม่ถูกต้อง กด "ลองพูดใหม่" ได้</p>
+                    </div>
+                </div>
+                <div class="howto-step">
+                    <div class="howto-step-num">5</div>
+                    <div class="howto-step-content">
+                        <h4>ดูผลการประเมิน</h4>
+                        <p>เมื่อสัมภาษณ์ครบ ระบบจะแสดงคะแนน จุดแข็ง จุดที่ควรปรับปรุง คำแนะนำ และสามารถดาวน์โหลดรายงานได้</p>
+                    </div>
+                </div>
+            </div>
+            <div class="howto-note">
+                <i data-lucide="info"></i>
+                <span>แนะนำให้ใช้ Google Chrome เพื่อการรับเสียงที่ดีที่สุด</span>
+            </div>
+            <button class="btn btn-primary" onclick="closeModal('howto-modal')">เข้าใจแล้ว</button>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal-overlay hidden" id="history-modal">
+        <div class="modal-box modal-box-lg">
+            <button class="modal-close" onclick="closeModal('history-modal')" aria-label="ปิด"><i data-lucide="x"></i></button>
+            <h3>ประวัติผลการฝึก</h3>
+            <div id="history-list"></div>
+            <div class="history-actions">
+                <button class="btn btn-ghost btn-xs" id="btn-clear-history" onclick="clearHistory()" style="display:none;">
+                    <i data-lucide="trash-2"></i> ล้างประวัติทั้งหมด
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal-overlay hidden" id="confirm-modal">
+        <div class="modal-box">
+            <div class="modal-icon modal-icon-warn">
+                <i data-lucide="alert-triangle"></i>
+            </div>
+            <h3 id="confirm-title">ยืนยันการจบการสัมภาษณ์</h3>
+            <p id="confirm-message">คุณต้องการจบการสัมภาษณ์หรือไม่? ผลที่ได้จะไม่ครบถ้วน</p>
+            <div class="confirm-actions">
+                <button class="btn btn-ghost" onclick="closeModal('confirm-modal')">ยกเลิก</button>
+                <button class="btn btn-danger" id="confirm-ok-btn" onclick="endInterview()">จบการสัมภาษณ์</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
